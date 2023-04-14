@@ -28,7 +28,12 @@ using Nuke.Common.CI.GitHubActions;
     "continuous",
     GitHubActionsImage.UbuntuLatest,
     On = new[] { GitHubActionsTrigger.Push },
-    InvokedTargets = new[] { nameof(Compile) })]
+    InvokedTargets = new[] { nameof(Compile) }, AutoGenerate = false)]
+[GitHubActions(
+    "deploy",
+    GitHubActionsImage.UbuntuLatest,
+    On = new[] { GitHubActionsTrigger.WorkflowDispatch },
+    InvokedTargets = new[] { nameof(Deploy) }, AutoGenerate = false)]
 class Build : NukeBuild
 {
     /// Support plugins are available for:
