@@ -32,4 +32,6 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
       - name: Run './build.cmd Compile'
-        run: ./build.cmd Compile
+        run: |
+          chmod +x ./build.cmd
+          ./build.cmd Compile
