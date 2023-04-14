@@ -34,4 +34,5 @@ jobs:
       - name: Run './build.cmd Compile'
         run: |
           chmod +x ./build.cmd
+          chmod +x ./build.sh
           ./build.cmd Compile
