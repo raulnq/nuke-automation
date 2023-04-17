@@ -36,6 +36,8 @@ jobs:
         env:
           WebAppPassword: ${{ secrets.WEB_APP_PASSWORD }}
           ConnectionString: ${{ secrets.CONNECTION_STRING }}
+          WebAppUser: $nuke-demo
+          WebAppName: nuke-demo
       - uses: actions/upload-artifact@v1
         with:
           name: artifact
