@@ -25,14 +25,15 @@ using System.Collections;
 using Nuke.Common.CI.GitHubActions;
 
 [GitHubActions(
-    "continuous",
+    "compile",
     GitHubActionsImage.UbuntuLatest,
     On = new[] { GitHubActionsTrigger.Push },
-    InvokedTargets = new[] { nameof(Compile) }, AutoGenerate = false)]
+    InvokedTargets = new[] { nameof(Compile) })]
 [GitHubActions(
     "deploy",
     GitHubActionsImage.UbuntuLatest,
     On = new[] { GitHubActionsTrigger.WorkflowDispatch },
+    ImportSecrets = new[] {nameof(WebAppPassword), nameof(ConnectionString) },
     InvokedTargets = new[] { nameof(Deploy) }, AutoGenerate = false)]
 class Build : NukeBuild
 {
