@@ -326,6 +326,7 @@ class Build : NukeBuild
                 memStream.Position = 0;
                 var content = new StreamContent(memStream);
                 var httpClient = new HttpClient();
+                httpClient.Timeout = TimeSpan.FromSeconds(60);
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", base64Auth);
                 var requestUrl = $"https://{WebAppName}.scm.azurewebsites.net/api/zipdeploy";
                 var response = await httpClient.PostAsync(requestUrl, content);
