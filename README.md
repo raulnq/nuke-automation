@@ -1,4 +1,4 @@
-# NUKE
+# WebAPI
 
 ## Install NUKE
 
@@ -9,7 +9,6 @@ dotnet tool install Nuke.GlobalTool --global
 ## Start development environment
 
 ```
-dotnet tool install Nuke.GlobalTool --global
 nuke StartEnv
 ```
 

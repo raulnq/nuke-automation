@@ -22,7 +22,11 @@ public class RegisterProductTests : IAsyncLifetime
     [Fact]
     public Task register_should_be_ok()
     {
-        return _appDsl.Product.Register();
+        return _appDsl.Product.Register(command =>
+        {
+            command.Name = new string('*', 500);
+            command.Description = new string('*', 4000);
+        });
     }
 
     [Fact]
@@ -39,7 +43,11 @@ public class RegisterProductTests : IAsyncLifetime
     {
         return _appDsl.Product.Register(command =>
         {
-            command.Name = new string('*', 256); ;
-        }, errorDetail: "ValidationErrorDetail", new Dictionary<string, string[]> { { "name", new string[] { "MaximumLengthValidator" } } });
+            command.Name = new string('*', 501);
+            command.Description = new string('*', 4001);
+        }, errorDetail: "ValidationErrorDetail", new Dictionary<string, string[]> { 
+            { "name", new string[] { "MaximumLengthValidator" } },
+            { "description", new string[] { "MaximumLengthValidator" } }
+        });
     }
 }
