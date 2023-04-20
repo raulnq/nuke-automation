@@ -1,26 +1,18 @@
 using System;
 using System.Linq;
 using Nuke.Common;
-using Nuke.Common.CI;
-using Nuke.Common.Execution;
 using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
 using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Docker;
 using static Nuke.Common.Tools.Docker.DockerTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using Octokit;
 using System.IO.Compression;
 using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Collections.Generic;
-using NuGet.Common;
 using System.Collections;
 using Nuke.Common.CI.GitHubActions;
 
@@ -37,12 +29,6 @@ using Nuke.Common.CI.GitHubActions;
     InvokedTargets = new[] { nameof(Deploy) }, AutoGenerate = false)]
 class Build : NukeBuild
 {
-    /// Support plugins are available for:
-    ///   - JetBrains ReSharper        https://nuke.build/resharper
-    ///   - JetBrains Rider            https://nuke.build/rider
-    ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
-    ///   - Microsoft VSCode           https://nuke.build/vscode
-
     string DockerPrefix = "WebAPI";
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath TestsDirectory => RootDirectory / "tests";
@@ -58,6 +44,7 @@ class Build : NukeBuild
     string SQLPassword = "Sqlserver123$";
 
     Target RunOrStartSQLServer => _ => _
+    .Description($"Run SQLServer on port {SQLPort}")
     .Executes(() =>
     {
         try
@@ -81,6 +68,7 @@ class Build : NukeBuild
     string SEQPort = "5342";
 
     Target RunOrStartSeq => _ => _
+        .Description($"Run Seq on port {SEQPort}")
         .Executes(() =>
         {
             try
@@ -108,6 +96,7 @@ class Build : NukeBuild
     string RabbitMQPort = "5671";
 
     Target RunOrStartRabbitMQ => _ => _
+        .Description($"Run RabbitMQ on port {RabbitMQPort}")
         .Executes(() =>
         {
             try
@@ -131,6 +120,7 @@ class Build : NukeBuild
         });
 
     Target StartEnv => _ => _
+        .Description("Start the development environment")
         .DependsOn(RunOrStartSQLServer)
         .DependsOn(RunOrStartSeq)
         .DependsOn(RunOrStartRabbitMQ)
@@ -164,12 +154,13 @@ class Build : NukeBuild
         });
 
     Target StopEnv => _ => _
+        .Description("Stop the development environment")
         .DependsOn(StopSQLServer)
         .DependsOn(StopSeq)
         .DependsOn(StopRabbitMQ)
         .Executes(() =>
         {
-            Serilog.Log.Information("Development env stoped");
+            Serilog.Log.Information("Development env stopped");
         });
 
     Target RemoveSQLServer => _ => _
@@ -203,6 +194,7 @@ class Build : NukeBuild
         .DependsOn(RemoveSQLServer)
         .DependsOn(RemoveSeq)
         .DependsOn(RemoveRabbitMQ)
+        .Description("Remove the development environment")
         .Executes(() =>
         {
             Serilog.Log.Information("Development env removed");
@@ -214,16 +206,16 @@ class Build : NukeBuild
 
     string TestsProject = "Tests";
 
-    [Parameter()]
+    [Parameter("Azure web app username FTP credential")]
     public string WebAppUser;
 
-    [Parameter()]
+    [Parameter("Azure web app password FTP credential")]
     public string WebAppPassword;
 
-    [Parameter]
+    [Parameter("Azure web app name")]
     public string WebAppName;
 
-    [Parameter]
+    [Parameter("Connection string to run the migration")]
     public string ConnectionString;
 
     Target CleanMigrator => _ => _
@@ -255,6 +247,7 @@ class Build : NukeBuild
 
     Target RunMigrator => _ => _
         .DependsOn(PublishMigrator)
+        .Description("Apply the scripts over the database")
         .Executes(() =>
         {
             var defaultEnvironmentVariables = Environment.GetEnvironmentVariables()
@@ -287,6 +280,7 @@ class Build : NukeBuild
         });
 
     Target Test => _ => _
+        .Description("Run integration tests")
         .DependsOn(Compile)
         .Executes(() =>
         {
@@ -316,6 +310,7 @@ class Build : NukeBuild
         });
 
     Target Deploy => _ => _
+        .Description("Deploy the app to Azure web app")
         .DependsOn(RunMigrator)
         .DependsOn(Zip)
         .Requires(() => ConnectionString)

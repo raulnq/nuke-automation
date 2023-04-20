@@ -12,7 +12,7 @@ public static partial class ServiceCollectionExtensions
 {
     public const string KeyName = "X-API-KEY";
 
-    private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration, Func<AuthenticationBuilder, AuthenticationBuilder> authenticationBuilder = null)
+    private static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration, Func<AuthenticationBuilder, AuthenticationBuilder>? authenticationBuilder = null)
     {
         var jwtConfig = configuration.GetSection("Jwt");
 

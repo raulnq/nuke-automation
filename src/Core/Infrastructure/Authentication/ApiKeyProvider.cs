@@ -26,7 +26,9 @@ public class ApiKeyProvider : IApiKeyProvider
                 return Task.FromResult<IApiKey>(new ApiKey(key, new List<Claim>() { new Claim(ClaimTypes.Role, role) }));
             }
 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             return Task.FromResult<IApiKey>(default);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         }
         catch (Exception exception)
         {

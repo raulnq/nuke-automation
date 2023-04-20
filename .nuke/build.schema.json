@@ -15,7 +15,8 @@
           ]
         },
         "ConnectionString": {
-          "type": "string"
+          "type": "string",
+          "description": "Connection string to run the migration"
         },
         "Continue": {
           "type": "boolean",
@@ -142,13 +143,16 @@
           ]
         },
         "WebAppName": {
-          "type": "string"
+          "type": "string",
+          "description": "Azure web app name"
         },
         "WebAppPassword": {
-          "type": "string"
+          "type": "string",
+          "description": "Azure web app password FTP credential"
         },
         "WebAppUser": {
-          "type": "string"
+          "type": "string",
+          "description": "Azure web app username FTP credential"
         }
       }
     }

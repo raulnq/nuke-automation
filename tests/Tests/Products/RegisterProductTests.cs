@@ -35,7 +35,7 @@ public class RegisterProductTests : IAsyncLifetime
     }
 
     [Fact]
-    public Task register_should_throw_an_error_when_name_too_long()
+    public Task register_should_throw_an_error_when_nae_too_long()
     {
         return _appDsl.Product.Register(command =>
         {
