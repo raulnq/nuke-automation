@@ -25,7 +25,7 @@ public class RegisterProductTests : IAsyncLifetime
         return _appDsl.Product.Register(command =>
         {
             command.Name = new string('*', 500);
-            command.Description = new string('*', 4000);
+            command.Description = new string('*', 3000);
         });
     }
 
@@ -44,7 +44,7 @@ public class RegisterProductTests : IAsyncLifetime
         return _appDsl.Product.Register(command =>
         {
             command.Name = new string('*', 501);
-            command.Description = new string('*', 4001);
+            command.Description = new string('*', 3001);
         }, errorDetail: "ValidationErrorDetail", new Dictionary<string, string[]> { 
             { "name", new string[] { "MaximumLengthValidator" } },
             { "description", new string[] { "MaximumLengthValidator" } }
