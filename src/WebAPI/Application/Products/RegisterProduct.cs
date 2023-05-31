@@ -28,7 +28,7 @@ public class RegisterProduct
         public CommandValidator()
         {
             RuleFor(command => command.Name).MaximumLength(500).NotEmpty();
-            RuleFor(command => command.Description).MaximumLength(3500);
+            RuleFor(command => command.Description).MaximumLength(1000);
         }
     }
 
