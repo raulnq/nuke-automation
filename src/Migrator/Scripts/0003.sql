@@ -1,0 +1,1 @@
+﻿ALTER TABLE dbo.[Products] ALTER COLUMN [Description] nvarchar(1500) NOT NULL

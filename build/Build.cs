@@ -129,76 +129,76 @@ class Build : NukeBuild
             Serilog.Log.Information("Development env started");
         });
 
-Target StopSQLServer => _ => _
-    .Executes(() =>
-    {
-        DockerStop(x => x
-        .AddContainers($"{DockerPrefix}-sqlserver")
-        );
-    });
+    Target StopSQLServer => _ => _
+        .Executes(() =>
+        {
+            DockerStop(x => x
+            .AddContainers($"{DockerPrefix}-sqlserver")
+            );
+        });
 
-Target StopSeq => _ => _
-    .Executes(() =>
-    {
-        DockerStop(x => x
-        .AddContainers($"{DockerPrefix}-seq")
-        );
-    });
+    Target StopSeq => _ => _
+        .Executes(() =>
+        {
+            DockerStop(x => x
+            .AddContainers($"{DockerPrefix}-seq")
+            );
+        });
 
-Target StopRabbitMQ => _ => _
-    .Executes(() =>
-    {
-        DockerStop(x => x
-        .AddContainers($"{DockerPrefix}-rabbitmq")
-        );
-    });
+    Target StopRabbitMQ => _ => _
+        .Executes(() =>
+        {
+            DockerStop(x => x
+            .AddContainers($"{DockerPrefix}-rabbitmq")
+            );
+        });
 
-Target StopEnv => _ => _
-    .Description("Stop the development environment")
-    .DependsOn(StopSQLServer)
-    .DependsOn(StopSeq)
-    .DependsOn(StopRabbitMQ)
-    .Executes(() =>
-    {
-        Serilog.Log.Information("Development env stopped");
-    });
+    Target StopEnv => _ => _
+        .Description("Stop the development environment")
+        .DependsOn(StopSQLServer)
+        .DependsOn(StopSeq)
+        .DependsOn(StopRabbitMQ)
+        .Executes(() =>
+        {
+            Serilog.Log.Information("Development env stopped");
+        });
 
-Target RemoveSQLServer => _ => _
-    .DependsOn(StopSQLServer)
-    .Executes(() =>
-    {
-        DockerRm(x => x
-        .AddContainers($"{DockerPrefix}-sqlserver")
-        );
-    });
+    Target RemoveSQLServer => _ => _
+        .DependsOn(StopSQLServer)
+        .Executes(() =>
+        {
+            DockerRm(x => x
+            .AddContainers($"{DockerPrefix}-sqlserver")
+            );
+        });
 
-Target RemoveSeq => _ => _
-    .DependsOn(StopSeq)
-    .Executes(() =>
-    {
-        DockerRm(x => x
-        .AddContainers($"{DockerPrefix}-seq")
-        );
-    });
+    Target RemoveSeq => _ => _
+        .DependsOn(StopSeq)
+        .Executes(() =>
+        {
+            DockerRm(x => x
+            .AddContainers($"{DockerPrefix}-seq")
+            );
+        });
 
-Target RemoveRabbitMQ => _ => _
-    .DependsOn(StopRabbitMQ)
-    .Executes(() =>
-    {
-        DockerRm(x => x
-        .AddContainers($"{DockerPrefix}-rabbitmq")
-        );
-    });
+    Target RemoveRabbitMQ => _ => _
+        .DependsOn(StopRabbitMQ)
+        .Executes(() =>
+        {
+            DockerRm(x => x
+            .AddContainers($"{DockerPrefix}-rabbitmq")
+            );
+        });
 
-Target RemoveEnv => _ => _
-    .DependsOn(RemoveSQLServer)
-    .DependsOn(RemoveSeq)
-    .DependsOn(RemoveRabbitMQ)
-    .Description("Remove the development environment")
-    .Executes(() =>
-    {
-        Serilog.Log.Information("Development env removed");
-    });
+    Target RemoveEnv => _ => _
+        .DependsOn(RemoveSQLServer)
+        .DependsOn(RemoveSeq)
+        .DependsOn(RemoveRabbitMQ)
+        .Description("Remove the development environment")
+        .Executes(() =>
+        {
+            Serilog.Log.Information("Development env removed");
+        });
 
     string MigratorProject = "Migrator";
 
